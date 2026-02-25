@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -121,6 +121,13 @@ const dictionary = {
 
 export default function ServicesPage() {
   const [lang, setLang] = useState<"zh" | "en">("zh");
+  useEffect(() => {
+    const nextLang = new URLSearchParams(window.location.search).get("lang");
+    if (nextLang === "zh" || nextLang === "en") {
+      setLang(nextLang);
+    }
+  }, []);
+  const withLang = (path: string) => `${path}?lang=${lang}`;
   const t = dictionary[lang];
 
   return (
@@ -129,15 +136,15 @@ export default function ServicesPage() {
       {/* --- 1. 统一导航栏 (包含 Link 无刷新跳转) --- */}
       <nav className="fixed top-0 w-full z-50 py-4 px-6 md:px-16 bg-[#05101E]/90 backdrop-blur-md border-b border-white/10 transition-all duration-300">
         <div className="max-w-7xl mx-auto flex justify-between items-center w-full">
-          <Link href="/" className="flex items-center shrink-0">
+          <Link href={withLang("/")} className="flex items-center shrink-0">
             <Image src="/logo-transparent.png" alt="ACM Prime Logo" width={300} height={200} priority className="w-auto h-8 md:h-11 object-contain" />
           </Link>
           <div className="hidden lg:flex space-x-10 xl:space-x-12 text-[13px] font-semibold text-white/80 uppercase tracking-widest">
             {/* 当前页面：核心服务，文字高亮为金色 */}
-            <Link href="/services" className="text-acm-gold transition-colors">{t.nav.services}</Link>
-            <Link href="/insights" className="hover:text-acm-gold transition-colors">{t.nav.insights}</Link>
-            <Link href="/about" className="hover:text-acm-gold transition-colors">{t.nav.about}</Link>
-<Link href="/careers" className="hover:text-acm-gold transition-colors">{t.nav.careers}</Link>
+            <Link href={withLang("/services")} className="text-acm-gold transition-colors">{t.nav.services}</Link>
+            <Link href={withLang("/insights")} className="hover:text-acm-gold transition-colors">{t.nav.insights}</Link>
+            <Link href={withLang("/about")} className="hover:text-acm-gold transition-colors">{t.nav.about}</Link>
+            <Link href={withLang("/careers")} className="hover:text-acm-gold transition-colors">{t.nav.careers}</Link>
           </div>
           <div className="flex items-center space-x-6 shrink-0">
             <button onClick={() => setLang(lang === "zh" ? "en" : "zh")} className="text-[13px] font-bold text-white hover:text-acm-gold transition-colors flex items-center gap-1">
@@ -145,9 +152,9 @@ export default function ServicesPage() {
               <span className="text-white/30">|</span>
               <span className={lang === 'zh' ? 'text-acm-gold' : ''}>中</span>
             </button>
-            <button className="hidden md:block bg-acm-gold text-[#05101E] px-6 py-2.5 text-sm font-bold hover:bg-white transition-colors rounded-sm shadow-md">
+            <a href="#contact" className="hidden md:block bg-acm-gold text-[#05101E] px-6 py-2.5 text-sm font-bold hover:bg-white transition-colors rounded-sm shadow-md">
               {t.nav.contact}
-            </button>
+            </a>
           </div>
         </div>
       </nav>
@@ -238,14 +245,14 @@ export default function ServicesPage() {
             <h2 className="text-3xl md:text-5xl font-serif font-bold text-[#05101E] mb-10 leading-tight">
                {t.cta.title}
             </h2>
-            <button className="bg-[#05101E] text-white px-10 py-5 text-lg font-bold tracking-widest uppercase hover:bg-gray-900 transition-all duration-300 rounded-sm shadow-2xl hover:-translate-y-1">
+            <a href="#contact" className="inline-block bg-[#05101E] text-white px-10 py-5 text-lg font-bold tracking-widest uppercase hover:bg-gray-900 transition-all duration-300 rounded-sm shadow-2xl hover:-translate-y-1">
                {t.cta.btn}
-            </button>
+            </a>
          </motion.div>
       </section>
 
       {/* --- 5. 统一页脚 --- */}
-      <footer className="bg-[#05101E] text-white pt-20 pb-10 px-6 md:px-16 border-t border-white/10 mt-auto">
+      <footer id="contact" className="bg-[#05101E] text-white pt-20 pb-10 px-6 md:px-16 border-t border-white/10 mt-auto">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
             <div className="lg:pr-8">

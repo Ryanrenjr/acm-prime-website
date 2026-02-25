@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import Image from "next/image";
@@ -108,6 +108,13 @@ const staggerContainer: Variants = {
 
 export default function Home() {
   const [lang, setLang] = useState<"zh" | "en">("zh");
+  useEffect(() => {
+    const nextLang = new URLSearchParams(window.location.search).get("lang");
+    if (nextLang === "zh" || nextLang === "en") {
+      setLang(nextLang);
+    }
+  }, []);
+  const withLang = (path: string) => `${path}?lang=${lang}`;
   const t = dictionary[lang];
 
   return (
@@ -117,14 +124,14 @@ export default function Home() {
       {/* --- 1. 统一导航栏 --- */}
       <nav className="fixed top-0 w-full z-50 py-4 px-6 md:px-16 bg-[#05101E]/90 backdrop-blur-md border-b border-white/10 transition-all duration-300">
         <div className="max-w-7xl mx-auto flex justify-between items-center w-full">
-          <Link href="/" className="flex items-center shrink-0">
+          <Link href={withLang("/")} className="flex items-center shrink-0">
             <Image src="/logo-transparent.png" alt="ACM Prime Logo" width={300} height={200} priority className="w-auto h-8 md:h-11 object-contain" />
           </Link>
           <div className="hidden lg:flex space-x-10 xl:space-x-12 text-[13px] font-semibold text-white/80 uppercase tracking-widest">
-            <Link href="/services" className="hover:text-acm-gold transition-colors">{t.nav.services}</Link>
-            <Link href="/insights" className="hover:text-acm-gold transition-colors">{t.nav.insights}</Link>
-            <Link href="/about" className="hover:text-acm-gold transition-colors">{t.nav.about}</Link>
-            <Link href="/careers" className="hover:text-acm-gold transition-colors">{t.nav.careers}</Link>
+            <Link href={withLang("/services")} className="hover:text-acm-gold transition-colors">{t.nav.services}</Link>
+            <Link href={withLang("/insights")} className="hover:text-acm-gold transition-colors">{t.nav.insights}</Link>
+            <Link href={withLang("/about")} className="hover:text-acm-gold transition-colors">{t.nav.about}</Link>
+            <Link href={withLang("/careers")} className="hover:text-acm-gold transition-colors">{t.nav.careers}</Link>
           </div>
           <div className="flex items-center space-x-6 shrink-0">
             <button onClick={() => setLang(lang === "zh" ? "en" : "zh")} className="text-[13px] font-bold text-white hover:text-acm-gold transition-colors flex items-center gap-1">
