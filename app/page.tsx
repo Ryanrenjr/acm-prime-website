@@ -107,7 +107,7 @@ const staggerContainer: Variants = {
 };
 
 export default function Home() {
-  const [lang, setLang] = useState<"zh" | "en">("zh");
+  const [lang, setLang] = useState<"zh" | "en">("en");
   useEffect(() => {
     const nextLang = new URLSearchParams(window.location.search).get("lang");
     if (nextLang === "zh" || nextLang === "en") {
